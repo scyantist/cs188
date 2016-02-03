@@ -87,10 +87,10 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    pdb.set_trace()
+    #print "Start:", problem.getStartState()
+    #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    #pdb.set_trace()
     visited = set()
     fringe = util.Stack()
     start = []
@@ -100,13 +100,19 @@ def depthFirstSearch(problem):
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
-        print node
-        if problem.isGoalState(node[-1]):
-            return node
-        if node[-1] not in visited:
-            visited.add(node[-1])
-            for (successor, action, cost) in problem.getSuccessors(node[-1]):
-                fringe.push(node.append(successor))
+        #print node
+        if problem.isGoalState(node[0]):
+            return node[1]
+        if node[0] not in visited:
+            visited.add(node[0])
+            for (successor, action, cost) in problem.getSuccessors(node[0]):
+                if (len(node) == 1):
+                    actionSequence = []
+                else:
+                    actionSequence = list(node[1])
+                actionSequence.append(action)
+                fringe.push((successor, actionSequence)) 
+                #node is a tuple of (position, list of actions to reach node)
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
