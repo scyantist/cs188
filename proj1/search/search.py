@@ -87,10 +87,6 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    #print "Start:", problem.getStartState()
-    #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    #pdb.set_trace()
     visited = set()
     fringe = util.Stack()
     start = []
@@ -100,13 +96,12 @@ def depthFirstSearch(problem):
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
-        #print node
         if problem.isGoalState(node[0]):
             return node[1]
         if node[0] not in visited:
             visited.add(node[0])
             for (successor, action, cost) in problem.getSuccessors(node[0]):
-                if (len(node) == 1):
+                if (len(node) == 1): #edge case: No actions yet for the start state
                     actionSequence = []
                 else:
                     actionSequence = list(node[1])
@@ -117,7 +112,26 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
+    visited = set()
+    fringe = util.Queue()
+    start = []
+    start.append(problem.getStartState())
+    fringe.push(start)
+    while not fringe.isEmpty():
+        if fringe.isEmpty():
+            return "Goal state not found."
+        node = fringe.pop()
+        if problem.isGoalState(node[0]):
+            return node[1]
+        if node[0] not in visited:
+            visited.add(node[0])
+            for (successor, action, cost) in problem.getSuccessors(node[0]):
+                if (len(node) == 1): #edge case: No actions yet for the start state
+                    actionSequence = []
+                else:
+                    actionSequence = list(node[1])
+                actionSequence.append(action)
+                fringe.push((successor, actionSequence))
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
