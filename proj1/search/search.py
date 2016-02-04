@@ -136,7 +136,26 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+    visited = set()
+    fringe = util.PriorityQueue()
+    start = []
+    start.append(problem.getStartState())
+    fringe.push(start, 0)
+    while not fringe.isEmpty():
+        if fringe.isEmpty():
+            return "Goal state not found."
+        node = fringe.pop()
+        if problem.isGoalState(node[0]):
+            return node[1]
+        if node[0] not in visited:
+            visited.add(node[0])
+            for (successor, action, cost) in problem.getSuccessors(node[0]):
+                if (len(node) == 1): #edge case: No actions yet for the start state
+                    actionSequence = []
+                else:
+                    actionSequence = list(node[1])
+                actionSequence.append(action)
+                fringe.push((successor, actionSequence), cost)
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -148,7 +167,26 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
+    visited = set()
+    fringe = util.PriorityQueue()
+    start = []
+    start.append(problem.getStartState())
+    fringe.push(start, heuristic)
+    while not fringe.isEmpty():
+        if fringe.isEmpty():
+            return "Goal state not found."
+        node = fringe.pop()
+        if problem.isGoalState(node[0]):
+            return node[1]
+        if node[0] not in visited:
+            visited.add(node[0])
+            for (successor, action, cost) in problem.getSuccessors(node[0]):
+                if (len(node) == 1): #edge case: No actions yet for the start state
+                    actionSequence = []
+                else:
+                    actionSequence = list(node[1])
+                actionSequence.append(action)
+                fringe.push((successor, actionSequence), heuristic + cost)
     util.raiseNotDefined()
 
 
