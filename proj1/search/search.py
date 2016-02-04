@@ -113,25 +113,55 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     visited = set()
+    #pdb.set_trace()
     fringe = util.Queue()
-    start = []
-    start.append(problem.getStartState())
+    #print problem.getStartState()
+    #start.append(problem.getStartState())
+    #print start
+    if type(problem.getStartState) == tuple:
+        start = []
+        start.append(problem.getStartState())
+    else:
+        start = problem.getStartState()
     fringe.push(start)
     while not fringe.isEmpty():
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
+        print node
         if problem.isGoalState(node[0]):
-            return node[1]
+            return node[-1]
+        #print node[0]
+        #print node[1]
         if node[0] not in visited:
             visited.add(node[0])
             for (successor, action, cost) in problem.getSuccessors(node[0]):
-                if (len(node) == 1): #edge case: No actions yet for the start state
-                    actionSequence = []
+                if (node == problem.getStartState()): #edge case: No actions yet for the start state
+                    """
+                    # Concatenate all elements--no actionSequence in node yet
+                    successorState = []
+                    for each in successor:
+                        successorState.append(each)
+                    """
+                    #print successor
+                    #print action
+                    stringToList = []
+                    stringToList.append(action)
+                    successor.append(stringToList)
+                    #print successor
+                    fringe.push(successor)
+                    #print fringe.isEmpty()
                 else:
-                    actionSequence = list(node[1])
-                actionSequence.append(action)
-                fringe.push((successor, actionSequence))
+                    actionSequence = list(node[-1])
+                    actionSequence.append(action)
+                    """
+                    # Concatenate all but last element--actionSequence
+                    successorState = []
+                    for i in range(0, len(successor - 2)):
+                        successorState.append(successor[i])
+                    """
+                    successor.append(actionSequence)
+                    fringe.push(successor)
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):

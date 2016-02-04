@@ -40,6 +40,7 @@ from game import Actions
 import util
 import time
 import search
+import pdb
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -281,7 +282,6 @@ class CornersProblem(search.SearchProblem):
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height-2, self.walls.width-2
         self.corners = ((1,1), (1,top), (right, 1), (right, top))
-
         for corner in self.corners:
             if not startingGameState.hasFood(*corner):
                 print 'Warning: no food in corner ' + str(corner)
@@ -294,7 +294,8 @@ class CornersProblem(search.SearchProblem):
         for i in range(0, len(self.corners)):
             if self.startingPosition == self.corners[i]:
                 self.cornersTouched[i] = True
-        self.startState = (self.startingPosition, self.cornersTouched)
+        # [] is place holder for actionSequence ??
+        self.startState = [self.startingPosition, self.cornersTouched]
         # Goal is all corners touched
         self.goal = [True, True, True, True]
 
@@ -324,19 +325,24 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-
+        #pdb.set_trace()
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             x,y = state
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
+                #print state[0]
                 for i in range(0, len(self.corners)):
-                    if state[0] == self.corners[i]:
+                    #print self.corners[i]
+                    #print self.cornersTouched[i]
+                    if (nextx, nexty) == self.corners[i]:
                         self.cornersTouched[i] = True
+                        #print self.cornersTouched[i]
+                
                 # Each state consists of the position and a boolean array of cornersTouched
-                nextState = ((nextx, nexty), self.cornersTouched)
-                cost = self.costFn(nextState[0])
+                nextState = [(nextx, nexty), self.cornersTouched]
+                cost = 1
                 successors.append( ( nextState, action, cost) )
 
         self._expanded += 1 # DO NOT CHANGE
