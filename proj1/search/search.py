@@ -186,7 +186,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 else:
                     actionSequence = list(node[1])
                 actionSequence.append(action)
-                fringe.push((successor, actionSequence), heuristic + cost)
+                fringe.push((successor, actionSequence), heuristic(successor, problem) 
+                    + problem.getCostOfActions(actionSequence))
     util.raiseNotDefined()
 
 
