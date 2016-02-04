@@ -186,6 +186,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 else:
                     actionSequence = list(node[1])
                 actionSequence.append(action)
+                #Successors are pushed onto the fringe with the combination priority of the heuristic for successor
+                #and the cost of actions to get to that successor.
                 fringe.push((successor, actionSequence), heuristic(successor, problem) 
                     + problem.getCostOfActions(actionSequence))
     util.raiseNotDefined()
