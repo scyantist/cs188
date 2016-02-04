@@ -289,14 +289,14 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
 
-        self.cornersTouched = [false, false, false, false]
+        self.cornersTouched = [False, False, False, False]
         # Edge case: if the starting position is any of the corners, then that corner has been touched
         for i in range(0, len(self.corners)):
             if self.startingPosition == self.corners[i]:
-                self.cornersTouched[i] = true
+                self.cornersTouched[i] = True
         self.startState = (self.startingPosition, self.cornersTouched)
         # Goal is all corners touched
-        self.goal = [true, true, true, true]
+        self.goal = [True, True, True, True]
 
     def getStartState(self):
         """
@@ -310,6 +310,7 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
+        ## Have all the corners been touched?
         return state[1] == self.goal
         util.raiseNotDefined()
 
@@ -324,18 +325,19 @@ class CornersProblem(search.SearchProblem):
             is the incremental cost of expanding to that successor
         """
 
-            successors = []
-            for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-                x,y = state
-                dx, dy = Actions.directionToVector(action)
-                nextx, nexty = int(x + dx), int(y + dy)
-                if not self.walls[nextx][nexty]:
-                    for i in range(0, len(self.corners)):
-                        if state[0] == self.corners[i]:
-                            self.cornersTouched[i] = true
-                    nextState = ((nextx, nexty), self.cornersTouched)
-                    cost = self.costFn(nextState[0])
-                    successors.append( ( nextState, action, cost) )
+        successors = []
+        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x,y = state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                for i in range(0, len(self.corners)):
+                    if state[0] == self.corners[i]:
+                        self.cornersTouched[i] = True
+                # Each state consists of the position and a boolean array of cornersTouched
+                nextState = ((nextx, nexty), self.cornersTouched)
+                cost = self.costFn(nextState[0])
+                successors.append( ( nextState, action, cost) )
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
