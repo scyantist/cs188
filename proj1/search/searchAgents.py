@@ -169,6 +169,7 @@ class PositionSearchProblem(search.SearchProblem):
         return self.startState
 
     def isGoalState(self, state):
+        ## DEBUG
         isGoal = state == self.goal
 
         # For display purposes only
@@ -305,15 +306,22 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         return self.startState
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
+        #pdb.set_trace()
         ## Have all the corners been touched?
-        return state[1] == self.goal
-        util.raiseNotDefined()
+        for corner in self.corners:
+            #print state
+            #print corner
+            print [corner, self.goal]
+            if (state == [corner, self.goal]):
+                return state == self.goal
+        return False
+        #util.raiseNotDefined()
 
     def getSuccessors(self, state):
         """

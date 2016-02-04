@@ -118,6 +118,7 @@ def breadthFirstSearch(problem):
     #print problem.getStartState()
     #start.append(problem.getStartState())
     #print start
+    pdb.set_trace()
     if type(problem.getStartState) == tuple:
         start = []
         start.append(problem.getStartState())
@@ -128,8 +129,11 @@ def breadthFirstSearch(problem):
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
-        print node
-        if problem.isGoalState(node[0]):
+        print node[:-1]
+        if problem.isGoalState(node[:-1]):
+            pdb.set_trace()
+            print node
+            print node[-1]
             return node[-1]
         #print node[0]
         #print node[1]
@@ -162,7 +166,6 @@ def breadthFirstSearch(problem):
                     """
                     successor.append(actionSequence)
                     fringe.push(successor)
-    util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
