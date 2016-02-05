@@ -114,37 +114,22 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     visited = set()
     fringe = util.Queue()
-    if type(problem.getStartState) == tuple:
-        start = []
-        start.append(problem.getStartState())
-    else:
-        start = problem.getStartState()
-    fringe.push(start)
+    start = problem.getStartState()
+    fringe.push(start + ['P'])
     while not fringe.isEmpty():
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
-        print node
         if problem.isGoalState(node[:-1]):
-            print "GOAL STATE REACHED"
-            return node[-1]
+            returnActions = node[-1]
+            return returnActions[1:]
         if tuple(node[:-1]) not in visited:
             visited.add(tuple(node[:-1]))
             for (successor, action, cost) in problem.getSuccessors(node[:-1]):
-                if (node == problem.getStartState()):
-                    """
-                    edge case: No actions yet for the start state
-                                no actionSequence in node yet
-                    """
-                    stringToList = []
-                    stringToList.append(action)
-                    successor.append(stringToList)
-                    fringe.push(successor)
-                else:
-                    actionSequence = list(node[-1])
-                    actionSequence.append(action)
-                    successor.append(actionSequence)
-                    fringe.push(successor)
+                actionSequence = list(node[-1])
+                actionSequence.append(action)
+                successor.append(actionSequence)
+                fringe.push(successor)
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

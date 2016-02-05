@@ -318,7 +318,7 @@ class CornersProblem(search.SearchProblem):
         for corner in self.corners:
             #print corner
             #print [corner, self.goal]
-            if (state == [corner, self.goal]:
+            if (state == [corner, self.goal]):
                 return True
         return False
         #util.raiseNotDefined()
@@ -333,24 +333,19 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-        #pdb.set_trace()
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            x,y = state
+            x,y = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                #print state[0]
                 cornerState = list(state[1])
                 for i in range(0, len(self.corners)):
-                    #print self.corners[i]
-                    #print self.cornersTouched[i]
                     if (nextx, nexty) == self.corners[i]:
                         cornerState[i] = True
-                        #print self.cornersTouched[i]
                 
                 # Each state consists of the position and a boolean array of cornersTouched
-                nextState = ((nextx, nexty), tuple(cornerState))
+                nextState = [(nextx, nexty), tuple(cornerState)]
                 cost = 1
                 successors.append( ( nextState, action, cost) )
 
