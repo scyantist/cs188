@@ -147,7 +147,7 @@ def uniformCostSearch(problem):
                 actionSequence = list(node[1])
                 actionSequence.append(action)
                 toPush = [successor, actionSequence]
-                fringe.push(toPush, cost)
+                fringe.push(toPush, problem.getCostOfActions(actionSequence[1:]))
 
 def nullHeuristic(state, problem=None):
     """
