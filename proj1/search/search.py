@@ -89,26 +89,23 @@ def depthFirstSearch(problem):
     """
     visited = set()
     fringe = util.Stack()
-    start = []
-    start.append(problem.getStartState())
-    fringe.push(start)
+    start = problem.getStartState()
+    fringe.push([start] + ['P'])
     while not fringe.isEmpty():
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
         if problem.isGoalState(node[0]):
-            return node[1]
+            returnActions = node[1]
+            return returnActions[1:]
         if node[0] not in visited:
             visited.add(node[0])
             for (successor, action, cost) in problem.getSuccessors(node[0]):
-                if (len(node) == 1): #edge case: No actions yet for the start state
-                    actionSequence = []
-                else:
-                    actionSequence = list(node[1])
+                actionSequence = list(node[1])
                 actionSequence.append(action)
-                fringe.push((successor, actionSequence)) 
-                #node is a tuple of (position, list of actions to reach node)
-    util.raiseNotDefined()
+                toPush = [successor, actionSequence]
+                fringe.push(toPush)
+    #util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
@@ -135,25 +132,22 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     visited = set()
     fringe = util.PriorityQueue()
-    start = []
-    start.append(problem.getStartState())
-    fringe.push(start, 0)
+    start = problem.getStartState()
+    fringe.push([start] + ['P'], 0)
     while not fringe.isEmpty():
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
         if problem.isGoalState(node[0]):
-            return node[1]
+            returnActions = node[1]
+            return returnActions[1:]
         if node[0] not in visited:
             visited.add(node[0])
             for (successor, action, cost) in problem.getSuccessors(node[0]):
-                if (len(node) == 1): #edge case: No actions yet for the start state
-                    actionSequence = []
-                else:
-                    actionSequence = list(node[1])
+                actionSequence = list(node[1])
                 actionSequence.append(action)
-                fringe.push((successor, actionSequence), cost)
-    util.raiseNotDefined()
+                toPush = [successor, actionSequence]
+                fringe.push(toPush, cost)
 
 def nullHeuristic(state, problem=None):
     """
@@ -166,28 +160,27 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     visited = set()
     fringe = util.PriorityQueue()
-    start = []
-    start.append(problem.getStartState())
-    fringe.push(start, heuristic)
+    start = problem.getStartState()
+    fringe.push([start] + ['P'], heuristic)
     while not fringe.isEmpty():
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
         if problem.isGoalState(node[0]):
-            return node[1]
+            returnActions = node[1]
+            return returnActions[1:]
         if node[0] not in visited:
             visited.add(node[0])
             for (successor, action, cost) in problem.getSuccessors(node[0]):
-                if (len(node) == 1): #edge case: No actions yet for the start state
-                    actionSequence = []
-                else:
-                    actionSequence = list(node[1])
+                actionSequence = list(node[1])
                 actionSequence.append(action)
+                toPush = [successor, actionSequence]
+                fringe.push(toPush, heuristic(successor, problem) + problem.getCostOfActions(actionSequence[1:]))
                 #Successors are pushed onto the fringe with the combination priority of the heuristic for successor
                 #and the cost of actions to get to that successor.
-                fringe.push((successor, actionSequence), heuristic(successor, problem) 
-                    + problem.getCostOfActions(actionSequence))
-    util.raiseNotDefined()
+                #fringe.push((successor, actionSequence), heuristic(successor, problem) 
+                #    + problem.getCostOfActions(actionSequence))
+    #util.raiseNotDefined()
 
 
 # Abbreviations
