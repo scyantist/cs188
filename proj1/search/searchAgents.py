@@ -487,8 +487,19 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    distManhattan = []
+    foodPellets = foodGrid.asList()
+    for i in range(0, len(foodPellets)):
+        distMan = util.manhattanDistance(position, foodPellets[i])
+        distManhattan.append(distMan)
+    if len(distManhattan) == 0:
+        return 0
+    distToClosestPellet = min(distManhattan)
+    positionClosest = foodPellets[distManhattan.index(distToClosestPellet)]
+    distToFarthestPellet = max(distManhattan)
+    positionFarthest = foodPellets[distManhattan.index(distToFarthestPellet)]
+    pelletDifference = util.manhattanDistance(positionClosest, positionFarthest)
+    return distToClosestPellet + pelletDifference
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -517,9 +528,9 @@ class ClosestDotSearchAgent(SearchAgent):
         food = gameState.getFood()
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
+        action = search.breadthFirstSearch(problem)
+        return action
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -552,10 +563,22 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         The state is Pacman's position. Fill this in with a goal test that will
         complete the problem definition.
         """
+        foodPellets = self.food.asList()
+        if len(foodPellets) == 0:
+            return True
         x,y = state
+        minIndex = 0
+        minDist = util.manhattanDistance(state, foodPellets[0])
+        if len(foodPellets) > 1:
+            for i in range(1, len(foodPellets)):
+                dist = util.manhattanDistance(state, foodPellets[i])
+                if (dist < minDist):
+                    minIndex = i
+                    minDist = dist
+        minDistFoodPosition = foodPellets[minIndex] 
+        return state == minDistFoodPosition
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
     """
