@@ -296,9 +296,9 @@ class CornersProblem(search.SearchProblem):
             if self.startingPosition == self.corners[i]:
                 self.cornersTouched[i] = True
         # [] is place holder for actionSequence ??
-        self.startState = [self.startingPosition, self.cornersTouched]
+        self.startState = [self.startingPosition, tuple(self.cornersTouched)]
         # Goal is all corners touched
-        self.goal = [True, True, True, True]
+        self.goal = (True, True, True, True)
 
     def getStartState(self):
         """
@@ -312,14 +312,14 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
+        #print state
         #pdb.set_trace()
         ## Have all the corners been touched?
         for corner in self.corners:
-            #print state
             #print corner
-            print [corner, self.goal]
-            if (state == [corner, self.goal]):
-                return state == self.goal
+            #print [corner, self.goal]
+            if (state == [corner, self.goal]:
+                return True
         return False
         #util.raiseNotDefined()
 
@@ -341,15 +341,16 @@ class CornersProblem(search.SearchProblem):
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
                 #print state[0]
+                cornerState = list(state[1])
                 for i in range(0, len(self.corners)):
                     #print self.corners[i]
                     #print self.cornersTouched[i]
                     if (nextx, nexty) == self.corners[i]:
-                        self.cornersTouched[i] = True
+                        cornerState[i] = True
                         #print self.cornersTouched[i]
                 
                 # Each state consists of the position and a boolean array of cornersTouched
-                nextState = [(nextx, nexty), self.cornersTouched]
+                nextState = ((nextx, nexty), tuple(cornerState))
                 cost = 1
                 successors.append( ( nextState, action, cost) )
 

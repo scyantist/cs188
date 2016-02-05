@@ -113,12 +113,7 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     visited = set()
-    #pdb.set_trace()
     fringe = util.Queue()
-    #print problem.getStartState()
-    #start.append(problem.getStartState())
-    #print start
-    pdb.set_trace()
     if type(problem.getStartState) == tuple:
         start = []
         start.append(problem.getStartState())
@@ -129,41 +124,25 @@ def breadthFirstSearch(problem):
         if fringe.isEmpty():
             return "Goal state not found."
         node = fringe.pop()
-        print node[:-1]
+        print node
         if problem.isGoalState(node[:-1]):
-            pdb.set_trace()
-            print node
-            print node[-1]
+            print "GOAL STATE REACHED"
             return node[-1]
-        #print node[0]
-        #print node[1]
-        if node[0] not in visited:
-            visited.add(node[0])
-            for (successor, action, cost) in problem.getSuccessors(node[0]):
-                if (node == problem.getStartState()): #edge case: No actions yet for the start state
+        if tuple(node[:-1]) not in visited:
+            visited.add(tuple(node[:-1]))
+            for (successor, action, cost) in problem.getSuccessors(node[:-1]):
+                if (node == problem.getStartState()):
                     """
-                    # Concatenate all elements--no actionSequence in node yet
-                    successorState = []
-                    for each in successor:
-                        successorState.append(each)
+                    edge case: No actions yet for the start state
+                                no actionSequence in node yet
                     """
-                    #print successor
-                    #print action
                     stringToList = []
                     stringToList.append(action)
                     successor.append(stringToList)
-                    #print successor
                     fringe.push(successor)
-                    #print fringe.isEmpty()
                 else:
                     actionSequence = list(node[-1])
                     actionSequence.append(action)
-                    """
-                    # Concatenate all but last element--actionSequence
-                    successorState = []
-                    for i in range(0, len(successor - 2)):
-                        successorState.append(successor[i])
-                    """
                     successor.append(actionSequence)
                     fringe.push(successor)
 
